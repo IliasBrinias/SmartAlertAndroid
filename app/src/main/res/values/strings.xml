@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">SmartAlertAndroid</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="invalid_credentials">Invalid Credentials</string>
+    <string name="something_happened">Something Happened...</string>
+    <string name="password_verify">Password Verify</string>
+    <string name="register">Register</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="alert_title">Alert</string>
+    <string name="pending_alerts">Pending Alerts</string>
+    <string name="hello">Hello</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="submit">Submit</string>
+    <string name="create_an_alert">Create an Alert</string>
+    <string name="alert_submited">Alert submited sucessfully</string>
+    <string-array name="risk_array">
+        <item name='flood'>Flood</item>
+        <item name='fire'>Fire</item>
+        <item name='snowfall'>Snowfall</item>
+        <item name='other'>Other</item>
+    </string-array>
+</resources>
