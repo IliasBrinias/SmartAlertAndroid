@@ -76,10 +76,11 @@ public class AlertRequest {
     public RequestBody getRequest(){
         return new MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("latitude", String.valueOf(0))
-            .addFormDataPart("longitude", String.valueOf(0))
+            .addFormDataPart("latitude", String.valueOf(latitude))
+            .addFormDataPart("longitude", String.valueOf(longitude))
             .addFormDataPart("timestamp", String.valueOf(new Date().getTime()))
             .addFormDataPart("comments", this.comments)
+            .addFormDataPart("riskId", String.valueOf(this.riskId))
             .addFormDataPart("image", this.image.getName(), RequestBody.create(MediaType.parse("image/*"), this.image) )
             .build();
     }

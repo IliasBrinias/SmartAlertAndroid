@@ -4,7 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,12 +32,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        apiInterface = RetrofitClient.getInstance(this).create(APIInterface.class);
+        apiInterface = RetrofitClient.getInstance().create(APIInterface.class);
         user = Tools.getUserFromMemory(this);
         initViews();
         gpsPermission();
+        storagePermission();
+    }
 
-
+    private void storagePermission() {
+        if (Build.VERSION.SDK_INT >= 30){
+            if (!Environment.isExternalStorageManager()){
+                Intent getpermission = new Intent();
+                getpermission.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(getpermission);
+            }
+        }
     }
 
     private void gpsPermission() {
@@ -52,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutAlert = findViewById(R.id.linearLayoutAlert);
         linearLayoutMap = findViewById(R.id.linearLayoutMap);
         linearLayoutAlert.setOnClickListener(this::showAlertActivity);
-        linearLayoutAlert.setOnClickListener(this::showMapActivity);
+        linearLayoutMap.setOnClickListener(this::showMapActivity);
         textViewTitle.setText(getString(R.string.hello)+" "+user.getName());
     }
 

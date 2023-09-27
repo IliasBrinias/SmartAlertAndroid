@@ -20,6 +20,13 @@
     <string name="submit">Submit</string>
     <string name="create_an_alert">Create an Alert</string>
     <string name="alert_submited">Alert submited sucessfully</string>
+    <string name="access_denied">Access Denied</string>
+    <string name="username_exists">Username Exists</string>
+    <string name="fill_obligatory_fields">Fill Obligatory Fields</string>
+    <string name="usern_not_found">User not found</string>
+    <string name="risk_not_found">Risk not found</string>
+    <string name="alert_not_found">Alert not found</string>
+    <string name="image_not_found">Image not found</string>
     <string-array name="risk_array">
         <item name='flood'>Flood</item>
         <item name='fire'>Fire</item>

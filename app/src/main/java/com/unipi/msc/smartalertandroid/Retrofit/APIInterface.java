@@ -1,5 +1,6 @@
 package com.unipi.msc.smartalertandroid.Retrofit;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.unipi.msc.smartalertandroid.Retrofit.Request.AlertRequest;
 import com.unipi.msc.smartalertandroid.Retrofit.Request.LoginRequest;
@@ -22,12 +23,11 @@ public interface APIInterface {
     @GET("/alert")
     Call<JsonObject> getAlert(@Header("Authorization") String auth);
 
-    @Multipart
     @POST("/alert")
     Call<JsonObject> createAlert(@Body RequestBody request, @Header("Authorization") String auth);
 
     @GET("/risk")
-    Call<JsonObject> getRisks(@Header("Authorization") String auth);
+    Call<JsonArray> getRisks(@Header("Authorization") String auth);
 
 //    @POST("/api/users")
 //    Call<User> createUser(@Body User user);

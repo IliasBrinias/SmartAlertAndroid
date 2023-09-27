@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         if (Tools.getUserFromMemory(this) != null){
             openMainActivity();
         }
-        apiInterface = RetrofitClient.getInstance(LoginActivity.this).create(APIInterface.class);
+        apiInterface = RetrofitClient.getInstance().create(APIInterface.class);
     }
 
     private void initViews() {
@@ -101,5 +101,10 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void openMainActivity(){
         startActivity(new Intent(LoginActivity.this,MainActivity.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
     }
 }
