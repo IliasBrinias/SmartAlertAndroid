@@ -27,6 +27,7 @@
     <string name="risk_not_found">Risk not found</string>
     <string name="alert_not_found">Alert not found</string>
     <string name="image_not_found">Image not found</string>
+    <string name="create_alert">Create Alert</string>
     <string-array name="risk_array">
         <item name='flood'>Flood</item>
         <item name='fire'>Fire</item>

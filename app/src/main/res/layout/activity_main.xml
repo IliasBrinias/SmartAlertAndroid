@@ -6,84 +6,69 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello Citizen"
-        android:textSize="@dimen/label_size"
-        android:layout_marginLeft="@dimen/view_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:padding="@dimen/view_margin"
-        android:layout_marginLeft="@dimen/view_margin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_dialog" />
-
-    <LinearLayout
-        android:id="@+id/linearLayoutAlert"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/view_margin"
-        android:layout_marginLeft="@dimen/view_margin"
-        android:layout_marginRight="@dimen/view_margin"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_header_back"
+        android:gravity="center_vertical"
+        android:padding="@dimen/view_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/imageButtonLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_dialog_alert"
-            app:tint="@color/black" />
-        <View
-            android:layout_width="@dimen/view_margin"
-            android:layout_height="0dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create Alert" />
-    </LinearLayout>
+            android:background="@android:color/transparent"
+            android:padding="@dimen/view_margin"
+            app:srcCompat="@drawable/ic_logout" />
 
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/view_margin"
+            android:padding="@dimen/view_margin"
+            android:text="Hello Citizen"
+            android:textColor="?colorPrimaryVariant"
+            android:textSize="@dimen/label_size" />
+    </LinearLayout>
     <LinearLayout
-        android:id="@+id/linearLayoutMap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/view_margin"
-        android:layout_marginTop="@dimen/view_margin"
-        android:layout_marginLeft="@dimen/view_margin"
-        android:layout_marginRight="@dimen/view_margin"
+        android:layout_marginBottom="@dimen/view_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutAlert"
-        app:layout_constraintVertical_bias="0.0">
-
-        <ImageView
-            android:layout_width="wrap_content"
+        app:layout_constraintStart_toStartOf="parent" >
+        <Button
+            android:id="@+id/buttonPendingAlert"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_dialog_map"
-            app:tint="@color/black" />
-
-        <View
-            android:layout_width="@dimen/view_margin"
-            android:layout_height="0dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/view_margin"
+            android:layout_marginStart="@dimen/view_margin"
+            android:padding="@dimen/view_margin"
+            android:text="@string/pending_alerts"/>
+        <Button
+            android:id="@+id/buttonCreateAlert"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="See Current Alerts" />
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/view_margin"
+            android:layout_marginStart="@dimen/view_margin"
+            android:padding="@dimen/view_margin"
+            android:text="@string/create_alert"/>
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

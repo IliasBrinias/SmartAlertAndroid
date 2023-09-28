@@ -31,6 +31,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import android.Manifest;
@@ -53,7 +54,7 @@ import java.util.List;
 public class CameraActivity extends AppCompatActivity {
     protected CameraCaptureSession cameraCaptureSessions;
     TextureView textureView;
-    Button captureButton;
+    ImageButton captureButton;
     private static final String TAG = "CameraActivity";
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
@@ -70,6 +71,7 @@ public class CameraActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    ImageButton imageButtonBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,8 @@ public class CameraActivity extends AppCompatActivity {
             textureView.setSurfaceTextureListener(textureListener);
         }
         captureButton = findViewById(R.id.captureButton); // Initialize the Button
+        imageButtonBack = findViewById(R.id.imageButtonBack);
+        imageButtonBack.setOnClickListener(v->finish());
         captureButton.setOnClickListener(this::takePicture);
     }
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {

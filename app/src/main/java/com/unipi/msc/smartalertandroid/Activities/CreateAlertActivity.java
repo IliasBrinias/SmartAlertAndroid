@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -50,7 +52,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateAlertActivity extends AppCompatActivity {
+public class CreateAlertActivity extends AppCompatActivity implements LocationListener {
     ImageButton imageButtonExit;
     ImageView imageViewPhoto;
     EditText editTextComments;
@@ -60,6 +62,7 @@ public class CreateAlertActivity extends AppCompatActivity {
     LocationManager locationManager;
     Toast t;
     File file;
+    Location currentLocation;
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -69,7 +72,7 @@ public class CreateAlertActivity extends AppCompatActivity {
                         // There are no request codes
                         Intent data = result.getData();
                         if (data == null) return;
-                        if (data.hasExtra(Tags.FILE_PATH)){
+                        if (data.hasExtra(Tags.FILE_PATH)) {
                             file = new File(data.getStringExtra(Tags.FILE_PATH));
                             Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                             try {
@@ -78,21 +81,20 @@ public class CreateAlertActivity extends AppCompatActivity {
                                 Matrix matrix = new Matrix();
                                 if (orientation == 6) {
                                     matrix.postRotate(90);
-                                }
-                                else if (orientation == 3) {
+                                } else if (orientation == 3) {
                                     matrix.postRotate(180);
-                                }
-                                else if (orientation == 8) {
+                                } else if (orientation == 8) {
                                     matrix.postRotate(270);
                                 }
                                 myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true); // rotating bitmap
+                            } catch (Exception ignore) {
                             }
-                            catch (Exception ignore) {}
                             imageViewPhoto.setImageBitmap(myBitmap);
                         }
                     }
                 }
             });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +103,10 @@ public class CreateAlertActivity extends AppCompatActivity {
         apiInterface = RetrofitClient.getInstance().create(APIInterface.class);
         getRisks();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
     }
 
     @SuppressLint("ResourceType")
@@ -110,6 +116,7 @@ public class CreateAlertActivity extends AppCompatActivity {
         editTextComments = findViewById(R.id.editTextComments);
         buttonSubmit = findViewById(R.id.buttonSubmit);
         spinnerRisk = findViewById(R.id.spinnerRisk);
+        imageButtonExit.setOnClickListener(v->finish());
         buttonSubmit.setOnClickListener(this::createAlert);
         imageViewPhoto.setOnClickListener(this::OpenCamera);
     }
@@ -143,20 +150,21 @@ public class CreateAlertActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationManager.removeUpdates(this);
+    }
+
     private void OpenCamera(View view) {
         someActivityResultLauncher.launch(new Intent(this, CameraActivity.class));
     }
 
     private void createAlert(View view) {
         if (spinnerRisk == null) return;
-        Location currentLocation = null;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
-//        if (currentLocation == null) return;
-        AlertRequest request = new AlertRequest(1.,//currentLocation.getLatitude(),
-                1.,//currentLocation.getLongitude(),
+        if (currentLocation == null) return;
+        AlertRequest request = new AlertRequest(currentLocation.getLatitude(),
+                currentLocation.getLongitude(),
                 new Date().getTime(),
                 editTextComments.getText().toString(),
                 riskList.get(spinnerRisk.getSelectedItemPosition()).getId(),
@@ -177,5 +185,10 @@ public class CreateAlertActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        currentLocation = location;
     }
 }

@@ -21,13 +21,16 @@ public interface APIInterface {
     Call<JsonObject> register(@Body RegisterRequest request);
 
     @GET("/alert")
-    Call<JsonObject> getAlert(@Header("Authorization") String auth);
+    Call<JsonArray> getAlert(@Header("Authorization") String auth);
 
     @POST("/alert")
     Call<JsonObject> createAlert(@Body RequestBody request, @Header("Authorization") String auth);
 
     @GET("/risk")
     Call<JsonArray> getRisks(@Header("Authorization") String auth);
+
+    @GET("/alert/notified")
+    Call<JsonArray> getNotifiedAlerts(@Header("Authorization") String auth);
 
 //    @POST("/api/users")
 //    Call<User> createUser(@Body User user);

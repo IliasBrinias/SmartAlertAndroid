@@ -7,12 +7,12 @@
     android:orientation="vertical"
     tools:context=".Activities.CreateAlertActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearLayoutCompat"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/ic_header_back"
         android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="@dimen/view_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,25 +20,21 @@
             android:id="@+id/imageButtonExit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/view_margin"
             android:padding="@dimen/view_margin"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/btn_dialog" />
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/ic_back" />
 
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/view_margin"
             android:text="@string/create_an_alert"
             android:textSize="@dimen/label_size"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:padding="@dimen/view_margin"
+            android:textColor="?colorPrimaryVariant"/>
 
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.unipi.msc.smartalertandroid.Activities.LoginActivity;
+import com.unipi.msc.smartalertandroid.Activities.MainActivity;
 import com.unipi.msc.smartalertandroid.Model.User;
 import com.unipi.msc.smartalertandroid.R;
 
