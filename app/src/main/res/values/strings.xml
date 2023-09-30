@@ -28,6 +28,13 @@
     <string name="alert_not_found">Alert not found</string>
     <string name="image_not_found">Image not found</string>
     <string name="create_alert">Create Alert</string>
+    <string name="alert">Alert</string>
+    <string name="notify">Notify</string>
+    <string name="disaster">Disaster</string>
+    <string name="user_s_name">User\'s Name</string>
+    <string name="location">Location</string>
+    <string name="comments">Comments</string>
+    <string name="users_notified">Users Notified</string>
     <string-array name="risk_array">
         <item name='flood'>Flood</item>
         <item name='fire'>Fire</item>

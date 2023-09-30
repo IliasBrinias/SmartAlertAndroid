@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,8 +11,8 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,8 +29,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.unipi.msc.smartalertandroid.Model.Alert;
-import com.unipi.msc.smartalertandroid.Model.Risk;
 import com.unipi.msc.smartalertandroid.Model.User;
 import com.unipi.msc.smartalertandroid.R;
 import com.unipi.msc.smartalertandroid.Retrofit.APIInterface;
@@ -46,18 +45,18 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
     private static final int REQ_LOCATION_CODE = 123;
     private TextView textViewTitle;
     private User user;
     private ImageButton imageButtonLogout;
-    private Button buttonCreateAlert, buttonPendingAlert;
+    private Button buttonCreateAlert;
     private MapView mapView;
     private GoogleMap googleMap;
     private APIInterface apiInterface;
     private List<Circle> circles = new ArrayList<>();
+    private Toast t;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,21 +95,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void initViews() {
         textViewTitle = findViewById(R.id.textViewTitle);
         buttonCreateAlert = findViewById(R.id.buttonCreateAlert);
-        buttonPendingAlert = findViewById(R.id.buttonPendingAlert);
         imageButtonLogout = findViewById(R.id.imageButtonLogout);
         imageButtonLogout.setOnClickListener(this::logout);
         buttonCreateAlert.setOnClickListener(this::showAlertActivity);
-        buttonPendingAlert.setOnClickListener(this::showPendingAlertActivity);
         textViewTitle.setText(getString(R.string.hello)+" "+user.getName());
     }
 
     private void logout(View view) {
         Tools.clearPreferences(this);
         startActivity(new Intent(this,LoginActivity.class));
-    }
-
-    private void showPendingAlertActivity(View view) {
-
     }
 
     private void showAlertActivity(View view) {
@@ -122,46 +115,48 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         this.googleMap = googleMap;
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.9838, 23.7275), 6));
-        apiInterface.getNotifiedAlerts(Tools.getTokenFromMemory(this)).enqueue(new Callback<JsonArray>() {
+        apiInterface.getNotifiedAlerts(Tools.getTokenFromMemory(this)).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                if (!response.isSuccessful()){
-                    if (response.code() == Tags.ACCESS_DENIED){
-                        logout(null);
-                    }else {
-                        Tools.handleErrorResponse(MainActivity.this,response.body().getAsJsonObject());
-                    }
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    try {
+                        List<Alert> alerts = new ArrayList<>();
+                        if (response.body().size() == 0) return;
+                        for (JsonElement element : response.body().get("data").getAsJsonArray()) {
+                            alerts.add(Alert.buildAlert(element.getAsJsonObject()));
+                        }
+                        showAlertedAreas(alerts);
+                    }catch (Exception ignore){}
                 }else {
-                    List<Alert> alerts = new ArrayList<>();
-                    for (JsonElement element : response.body()) {
-                        alerts.add(Alert.buildAlert(element.getAsJsonObject()));
-                    }
-                    showAlertedAreas(alerts);
+                    String msg = Tools.handleErrorResponse(MainActivity.this,response);
+                    Tools.showToast(t, MainActivity.this, msg);
                 }
             }
 
             @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 t.printStackTrace();
             }
         });
         if (user.getRole() != Role.OFFICER) return;
-        apiInterface.getAlert(Tools.getTokenFromMemory(this)).enqueue(new Callback<JsonArray>() {
+        apiInterface.getAlert(Tools.getTokenFromMemory(this)).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                if (!response.isSuccessful()){
-                    Tools.handleErrorResponse(MainActivity.this,response.body().getAsJsonObject());
-                }else {
-                    List<Alert> alerts = new ArrayList<>();
-                    for (JsonElement element : response.body()) {
-                        alerts.add(Alert.buildAlert(element.getAsJsonObject()));
-                    }
-                    showPendingAlerts(alerts);
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        List<Alert> alerts = new ArrayList<>();
+                        for (JsonElement element : response.body().get("data").getAsJsonArray()) {
+                            alerts.add(Alert.buildAlert(element.getAsJsonObject()));
+                        }
+                        showPendingAlerts(alerts);
+                    }catch (Exception ignore){}
+                } else {
+                    String msg = Tools.handleErrorResponse(MainActivity.this,response);
+                    Tools.showToast(t, MainActivity.this, msg);
                 }
             }
-
             @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -171,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         for (Alert alert:alerts) {
             Marker marker = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(alert.getLatitude(), alert.getLongitude()))
-                    .title(alert.getRisk().getName())
+                    .title(alert.getDisaster().getName())
             );
             marker.setTag(alert.getId());
         }
@@ -214,6 +209,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onInfoWindowClick(@NonNull Marker marker) {
         if (marker.getTag() instanceof Long){
             Long alertId = (Long) marker.getTag();
+            Intent intent = new Intent(this, AlertActivity.class);
+            intent.putExtra(Tags.ALERT_ID, alertId);
+            startActivity(intent);
         }
+    }
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
     }
 }

@@ -8,6 +8,7 @@
     tools:context=".Activities.CreateAlertActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_header_back"
@@ -20,18 +21,18 @@
             android:id="@+id/imageButtonExit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/view_margin"
             android:background="@android:color/transparent"
+            android:padding="@dimen/view_margin"
             app:srcCompat="@drawable/ic_back" />
 
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_an_alert"
-            android:textSize="@dimen/label_size"
             android:padding="@dimen/view_margin"
-            android:textColor="?colorPrimaryVariant"/>
+            android:text="@string/create_an_alert"
+            android:textColor="?colorPrimaryVariant"
+            android:textSize="@dimen/label_size" />
 
 
     </LinearLayout>
@@ -48,29 +49,91 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRisk"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerDisaster"
         app:layout_constraintVertical_bias="0.049">
 
         <ImageView
             android:id="@+id/imageViewPhoto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:src="@drawable/ic_add_image" />
     </androidx.cardview.widget.CardView>
 
     <Spinner
-        android:id="@+id/spinnerRisk"
+        android:id="@+id/spinnerDisaster"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/view_margin"
         android:layout_marginRight="@dimen/view_margin"
         android:layout_marginBottom="@dimen/view_margin"
+        android:layout_marginTop="@dimen/view_margin"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupDanger"
         app:layout_constraintVertical_bias="0.0" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupDanger"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:checkedButton="@+id/offer"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/view_margin"
+        android:layout_marginLeft="@dimen/view_margin"
+        android:layout_marginRight="@dimen/view_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.0">
+
+        <RadioButton
+            android:id="@+id/radioButtonLow"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:checked="true"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/toggle_widget_background"
+            android:drawableBottom="@drawable/ic_alert_low"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Search"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/radioButtonMedium"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="1dp"
+            android:background="@drawable/toggle_widget_background"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:drawableBottom="@drawable/ic_alert_medium"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Offers"
+            android:textColor="@color/white" />
+        <RadioButton
+            android:id="@+id/radioButtonHigh"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/toggle_widget_background"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:drawableBottom="@drawable/ic_alert_high"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Offers"
+            android:textColor="@color/white" />
+    </RadioGroup>
 
     <EditText
         android:id="@+id/editTextComments"

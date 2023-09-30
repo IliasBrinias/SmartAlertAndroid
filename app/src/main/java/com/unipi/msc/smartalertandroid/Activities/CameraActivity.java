@@ -55,7 +55,6 @@ public class CameraActivity extends AppCompatActivity {
     protected CameraCaptureSession cameraCaptureSessions;
     TextureView textureView;
     ImageButton captureButton;
-    private static final String TAG = "CameraActivity";
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
         ORIENTATIONS.append(Surface.ROTATION_0,90);

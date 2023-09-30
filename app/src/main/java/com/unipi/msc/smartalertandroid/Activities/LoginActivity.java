@@ -73,7 +73,8 @@ public class LoginActivity extends AppCompatActivity {
                     }catch (Exception ignore){}
                     openMainActivity();
                 }else{
-                    Tools.showToast(t,LoginActivity.this,R.string.something_happened);
+                    String msg = Tools.handleErrorResponse(LoginActivity.this,response);
+                    Tools.showToast(t, LoginActivity.this, msg);
                 }
             }
 

@@ -13,7 +13,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -32,14 +32,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.unipi.msc.smartalertandroid.Model.Risk;
+import com.unipi.msc.smartalertandroid.Model.Disaster;
 import com.unipi.msc.smartalertandroid.R;
 import com.unipi.msc.smartalertandroid.Retrofit.APIInterface;
 import com.unipi.msc.smartalertandroid.Retrofit.Request.AlertRequest;
 import com.unipi.msc.smartalertandroid.Retrofit.RetrofitClient;
+import com.unipi.msc.smartalertandroid.Shared.DangerLevel;
 import com.unipi.msc.smartalertandroid.Shared.Tags;
 import com.unipi.msc.smartalertandroid.Shared.Tools;
 
@@ -58,18 +58,20 @@ public class CreateAlertActivity extends AppCompatActivity implements LocationLi
     EditText editTextComments;
     Button buttonSubmit;
     APIInterface apiInterface;
-    Spinner spinnerRisk;
+    Spinner spinnerDisaster;
     LocationManager locationManager;
     Toast t;
     File file;
     Location currentLocation;
+    RadioGroup radioGroupDanger;
+    List<Disaster> disasterList = new ArrayList<>();
+
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        // There are no request codes
                         Intent data = result.getData();
                         if (data == null) return;
                         if (data.hasExtra(Tags.FILE_PATH)) {
@@ -101,7 +103,7 @@ public class CreateAlertActivity extends AppCompatActivity implements LocationLi
         setContentView(R.layout.activity_create_alert);
         initViews();
         apiInterface = RetrofitClient.getInstance().create(APIInterface.class);
-        getRisks();
+        getDisasters();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -115,36 +117,35 @@ public class CreateAlertActivity extends AppCompatActivity implements LocationLi
         imageViewPhoto = findViewById(R.id.imageViewPhoto);
         editTextComments = findViewById(R.id.editTextComments);
         buttonSubmit = findViewById(R.id.buttonSubmit);
-        spinnerRisk = findViewById(R.id.spinnerRisk);
+        spinnerDisaster = findViewById(R.id.spinnerDisaster);
+        radioGroupDanger = findViewById(R.id.radioGroupDanger);
         imageButtonExit.setOnClickListener(v->finish());
         buttonSubmit.setOnClickListener(this::createAlert);
         imageViewPhoto.setOnClickListener(this::OpenCamera);
     }
-    List<Risk> riskList = new ArrayList<>();
-    private void getRisks(){
-        Call<JsonArray> call = apiInterface.getRisks(Tools.getTokenFromMemory(this));
-        call.enqueue(new Callback<JsonArray>() {
+    private void getDisasters(){
+        Call<JsonObject> call = apiInterface.getDisasters(Tools.getTokenFromMemory(this));
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                if (!response.isSuccessful()){
-                    if (response.code() == Tags.ACCESS_DENIED) {
-                        Tools.clearPreferences(CreateAlertActivity.this);
-                        startActivity(new Intent(CreateAlertActivity.this,LoginActivity.class));
-                    }
-                    return;
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        disasterList.clear();
+                        List<String> disasters = new ArrayList<>();
+                        for (JsonElement element : response.body().get("data").getAsJsonArray()) {
+                            Disaster r = Disaster.buildDisaster(element.getAsJsonObject());
+                            disasters.add(r.getName());
+                            disasterList.add(r);
+                        }
+                        spinnerDisaster.setAdapter(new ArrayAdapter<>(CreateAlertActivity.this, android.R.layout.simple_spinner_item, disasters));
+                    }catch (Exception ignore){}
+                }else{
+                    String msg = Tools.handleErrorResponse(CreateAlertActivity.this,response);
+                    Tools.showToast(t, CreateAlertActivity.this, msg);
                 }
-                riskList.clear();
-                List<String> risks = new ArrayList<>();
-                for (JsonElement element : response.body()) {
-                    Risk r = Risk.buildRisk(element.getAsJsonObject());
-                    risks.add(r.getName());
-                    riskList.add(r);
-                }
-                spinnerRisk.setAdapter(new ArrayAdapter<>(CreateAlertActivity.this, android.R.layout.simple_spinner_item, risks));
             }
-
             @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -161,13 +162,14 @@ public class CreateAlertActivity extends AppCompatActivity implements LocationLi
     }
 
     private void createAlert(View view) {
-        if (spinnerRisk == null) return;
+        if (spinnerDisaster == null) return;
         if (currentLocation == null) return;
         AlertRequest request = new AlertRequest(currentLocation.getLatitude(),
                 currentLocation.getLongitude(),
                 new Date().getTime(),
                 editTextComments.getText().toString(),
-                riskList.get(spinnerRisk.getSelectedItemPosition()).getId(),
+                disasterList.get(spinnerDisaster.getSelectedItemPosition()).getId(),
+                getDangerLevel(),
                 file);
         Call<JsonObject> call = apiInterface.createAlert(request.getRequest(),Tools.getTokenFromMemory(this));
         call.enqueue(new Callback<JsonObject>() {
@@ -177,7 +179,8 @@ public class CreateAlertActivity extends AppCompatActivity implements LocationLi
                     Tools.showToast(t,CreateAlertActivity.this,R.string.alert_submited);
                     finish();
                 } else {
-                    Tools.handleErrorResponse(CreateAlertActivity.this, response.body());
+                    String msg = Tools.handleErrorResponse(CreateAlertActivity.this,response);
+                    Tools.showToast(t, CreateAlertActivity.this, msg);
                 }
             }
             @Override
@@ -185,6 +188,25 @@ public class CreateAlertActivity extends AppCompatActivity implements LocationLi
                 t.printStackTrace();
             }
         });
+    }
+
+    private DangerLevel getDangerLevel() {
+        DangerLevel dangerLevel = DangerLevel.MEDIUM;
+        switch (radioGroupDanger.getCheckedRadioButtonId()){
+            case 0: {
+                dangerLevel = DangerLevel.LOW;
+                break;
+            }
+            case 1: {
+                dangerLevel = DangerLevel.MEDIUM;
+                break;
+            }
+            case 2: {
+                dangerLevel = DangerLevel.HIGH;
+                break;
+            }
+        }
+        return dangerLevel;
     }
 
     @Override

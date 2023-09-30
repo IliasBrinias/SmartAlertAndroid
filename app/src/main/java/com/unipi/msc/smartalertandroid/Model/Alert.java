@@ -2,16 +2,18 @@ package com.unipi.msc.smartalertandroid.Model;
 
 
 import com.google.gson.JsonObject;
+import com.unipi.msc.smartalertandroid.Shared.DangerLevel;
 
 public class Alert {
     private Long Id;
     private double latitude;
     private double longitude;
     private Long timestamp;
+    private DangerLevel dangerLevel;
     private String comments;
     private Boolean notified;
-    private Long userId;
-    private Risk risk;
+    private String username;
+    private Disaster disaster;
     private String image;
 
     public Long getId() {
@@ -62,14 +64,6 @@ public class Alert {
         this.notified = notified;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     public String getImage() {
         return image;
     }
@@ -78,12 +72,28 @@ public class Alert {
         this.image = image;
     }
 
-    public Risk getRisk() {
-        return risk;
+    public Disaster getDisaster() {
+        return disaster;
     }
 
-    public void setRisk(Risk risk) {
-        this.risk = risk;
+    public void setDisaster(Disaster disaster) {
+        this.disaster = disaster;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public DangerLevel getDangerLevel() {
+        return dangerLevel;
+    }
+
+    public void setDangerLevel(DangerLevel dangerLevel) {
+        this.dangerLevel = dangerLevel;
     }
 
     public static Alert buildAlert(JsonObject jsonObject) {
@@ -110,11 +120,11 @@ public class Alert {
         }catch (Exception ignore){}
 
         try {
-            alert.setUserId(jsonObject.get("userId").getAsLong());
+            alert.setUsername(jsonObject.get("username").getAsString());
         }catch (Exception ignore){}
 
         try {
-            alert.setRisk(Risk.buildRisk(jsonObject.get("risk").getAsJsonObject()));
+            alert.setDisaster(Disaster.buildDisaster(jsonObject.get("disaster").getAsJsonObject()));
         }catch (Exception ignore){}
 
         try {
@@ -123,6 +133,10 @@ public class Alert {
 
         try {
             alert.setImage(jsonObject.get("image").getAsString());
+        }catch (Exception ignore){}
+
+        try {
+            alert.setDangerLevel(DangerLevel.valueOf(jsonObject.get("dangerLevel").getAsString()));
         }catch (Exception ignore){}
 
         return alert;

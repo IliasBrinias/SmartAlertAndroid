@@ -5,24 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.unipi.msc.smartalertandroid.Model.Risk;
+import com.unipi.msc.smartalertandroid.Model.Disaster;
 import com.unipi.msc.smartalertandroid.R;
 
 import java.util.Collections;
 import java.util.List;
 
-public class RiskArrayAdapter extends ArrayAdapter<List<Risk>> {
-    private List<Risk> riskList;
+public class RiskArrayAdapter extends ArrayAdapter<List<Disaster>> {
+    private List<Disaster> disasterList;
     private Context context;
-    public RiskArrayAdapter(@NonNull Context context, List<Risk> riskList) {
-        super(context, 0, Collections.singletonList(riskList));
-        this.riskList = riskList;
+    public RiskArrayAdapter(@NonNull Context context, List<Disaster> disasterList) {
+        super(context, 0, Collections.singletonList(disasterList));
+        this.disasterList = disasterList;
         this.context = context;
     }
 
@@ -40,7 +39,7 @@ public class RiskArrayAdapter extends ArrayAdapter<List<Risk>> {
 
         // then according to the position of the view assign the desired TextView 2 for the same
         TextView textView = currentItemView.findViewById(R.id.textView);
-        textView.setText(riskList.get(position).getName());
+        textView.setText(disasterList.get(position).getName());
 
         // then return the recyclable view
         return currentItemView;

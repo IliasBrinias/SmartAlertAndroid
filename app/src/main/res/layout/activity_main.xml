@@ -43,32 +43,19 @@
             android:textColor="?colorPrimaryVariant"
             android:textSize="@dimen/label_size" />
     </LinearLayout>
-    <LinearLayout
+    <Button
+        android:id="@+id/buttonCreateAlert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/view_margin"
+        android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" >
-        <Button
-            android:id="@+id/buttonPendingAlert"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="@dimen/view_margin"
-            android:layout_marginStart="@dimen/view_margin"
-            android:padding="@dimen/view_margin"
-            android:text="@string/pending_alerts"/>
-        <Button
-            android:id="@+id/buttonCreateAlert"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="@dimen/view_margin"
-            android:layout_marginStart="@dimen/view_margin"
-            android:padding="@dimen/view_margin"
-            android:text="@string/create_alert"/>
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="@dimen/view_margin"
+        android:layout_marginStart="@dimen/view_margin"
+        android:padding="@dimen/view_margin"
+        android:text="@string/create_alert"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

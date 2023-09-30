@@ -1,6 +1,8 @@
 package com.unipi.msc.smartalertandroid.Retrofit.Request;
 
 
+import com.unipi.msc.smartalertandroid.Shared.DangerLevel;
+
 import java.io.File;
 import java.util.Date;
 
@@ -13,75 +15,32 @@ public class AlertRequest {
     private double longitude;
     private Long timestamp;
     private String comments;
-    private Long riskId;
+    private Long disasterId;
+    private DangerLevel dangerLevel;
     private File image;
 
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public Long getRiskId() {
-        return riskId;
-    }
-
-    public void setRiskId(Long riskId) {
-        this.riskId = riskId;
-    }
-
-    public File getImage() {
-        return image;
-    }
-
-    public void setImage(File image) {
-        this.image = image;
-    }
-
-    public AlertRequest(double latitude, double longitude, Long timestamp, String comments, Long riskId, File image) {
+    public AlertRequest(double latitude, double longitude, Long timestamp, String comments, Long disasterId, DangerLevel dangerLevel, File image) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.timestamp = timestamp;
         this.comments = comments;
-        this.riskId = riskId;
+        this.disasterId = disasterId;
+        this.dangerLevel = dangerLevel;
         this.image = image;
     }
 
     public RequestBody getRequest(){
-        return new MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("latitude", String.valueOf(latitude))
-            .addFormDataPart("longitude", String.valueOf(longitude))
-            .addFormDataPart("timestamp", String.valueOf(new Date().getTime()))
-            .addFormDataPart("comments", this.comments)
-            .addFormDataPart("riskId", String.valueOf(this.riskId))
-            .addFormDataPart("image", this.image.getName(), RequestBody.create(MediaType.parse("image/*"), this.image) )
-            .build();
+        MultipartBody.Builder builder =  new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("latitude", String.valueOf(latitude))
+                .addFormDataPart("longitude", String.valueOf(longitude))
+                .addFormDataPart("timestamp", String.valueOf(new Date().getTime()))
+                .addFormDataPart("comments", this.comments)
+                .addFormDataPart("disasterId", String.valueOf(this.disasterId))
+                .addFormDataPart("dangerLevel", this.dangerLevel.name());
+        if (this.image != null){
+            builder.addFormDataPart("image", this.image.getName(), RequestBody.create(MediaType.parse("image/*"), this.image) );
+        }
+        return builder.build();
     }
 }
