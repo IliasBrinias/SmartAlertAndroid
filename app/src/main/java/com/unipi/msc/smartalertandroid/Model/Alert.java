@@ -100,11 +100,11 @@ public class Alert {
         Alert alert = new Alert();
 
         try {
-            alert.setLatitude(jsonObject.get("latitude").getAsLong());
+            alert.setLatitude(jsonObject.get("latitude").getAsDouble());
         }catch (Exception ignore){}
 
         try {
-            alert.setLongitude(jsonObject.get("longitude").getAsLong());
+            alert.setLongitude(jsonObject.get("longitude").getAsDouble());
         }catch (Exception ignore){}
 
         try {
