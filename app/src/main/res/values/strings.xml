@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartAlertAndroid</string>
+    <string name="app_name">Smart Alert</string>
     <string name="password">Password</string>
     <string name="name">Name</string>
     <string name="login">Login</string>
@@ -35,6 +35,11 @@
     <string name="location">Location</string>
     <string name="comments">Comments</string>
     <string name="users_notified">Users Notified</string>
+    <string name="flood_help" />
+    <string name="rain_help" />
+    <string name="tornado_help" />
+    <string name="earthquake_help" />
+    <string name="danger">DANGER</string>
     <string-array name="risk_array">
         <item name='flood'>Flood</item>
         <item name='fire'>Fire</item>

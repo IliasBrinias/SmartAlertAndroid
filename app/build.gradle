@@ -5,12 +5,13 @@ plugins {
 
 android {
     namespace 'com.unipi.msc.smartalertandroid'
-    compileSdk 33
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.unipi.msc.smartalertandroid"
-        minSdk 29
-        targetSdk 33
+        minSdkVersion 29
+        targetSdkVersion 33
+        compileSdkVersion 33
         versionCode 1
         versionName "1.0"
 
