@@ -40,6 +40,7 @@
     <string name="tornado_help" />
     <string name="earthquake_help" />
     <string name="danger">DANGER</string>
+    <string name="help">Help</string>
     <string-array name="risk_array">
         <item name='flood'>Flood</item>
         <item name='fire'>Fire</item>

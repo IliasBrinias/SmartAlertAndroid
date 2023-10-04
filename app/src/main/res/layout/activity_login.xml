@@ -4,9 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/view_margin"
-    android:layout_marginRight="@dimen/view_margin"
-    android:layout_marginBottom="@dimen/view_margin"
     tools:context=".Activities.LoginActivity">
 
     <LinearLayout
@@ -15,10 +12,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
-        android:layout_marginBottom="@dimen/view_margin"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSubmit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:textSize="@dimen/label_size" />
 
         <EditText
             android:id="@+id/editTextUsername"
@@ -34,6 +36,12 @@
         <View
             android:layout_width="wrap_content"
             android:layout_height="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            android:textSize="@dimen/label_size" />
 
         <EditText
             android:id="@+id/editTextPassword"
@@ -51,20 +59,12 @@
             android:layout_width="wrap_content"
             android:layout_height="10dp" />
 
-        <EditText
-            android:id="@+id/editTextPasswordVerify"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/ic_field_back"
-            android:ems="10"
-            android:hint="@string/password_verify"
-            android:inputType="textPassword"
-            android:padding="10dp" />
-
-        <View
+        <TextView
+            android:id="@+id/textViewName"
             android:layout_width="wrap_content"
-            android:layout_height="10dp" />
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:textSize="@dimen/label_size" />
 
         <EditText
             android:id="@+id/editTextName"
@@ -78,46 +78,61 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/buttonLogin"
+        android:id="@+id/buttonSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
-        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="@dimen/view_margin"
+        android:layout_marginRight="@dimen/view_margin"
+        android:text="@string/register"
+        app:layout_constraintBottom_toTopOf="@+id/textViewChangeMode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/buttonRegister"
+    <TextView
+        android:id="@+id/textViewChangeMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/register"
+        android:text="@string/login"
+        android:gravity="center"
+        android:padding="@dimen/view_margin"
+        android:layout_marginLeft="@dimen/view_margin"
+        android:layout_marginRight="@dimen/view_margin"
+        android:layout_marginBottom="@dimen/view_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/view_margin"
+    android:background="@drawable/ic_header_back"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Smart"
-        android:textColor="?colorPrimary"
+        android:textColor="@color/white"
         android:textSize="30sp"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:layout_marginTop="@dimen/view_margin"
+        android:layout_marginLeft="@dimen/view_margin"
+        android:paddingRight="@dimen/view_margin"
+        />
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Alert"
         android:textSize="23sp"
-        android:textColor="?colorSecondary"
-        android:layout_marginLeft="30dp"
+        android:paddingBottom="@dimen/view_margin"
+        android:textColor="@color/white"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="-15dp"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+</LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

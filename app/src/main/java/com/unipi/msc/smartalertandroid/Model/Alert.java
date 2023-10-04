@@ -3,6 +3,7 @@ package com.unipi.msc.smartalertandroid.Model;
 
 import com.google.gson.JsonObject;
 import com.unipi.msc.smartalertandroid.Shared.DangerLevel;
+import com.unipi.msc.smartalertandroid.Shared.Tools;
 
 public class Alert {
     private Long Id;
@@ -11,6 +12,8 @@ public class Alert {
     private Long timestamp;
     private DangerLevel dangerLevel;
     private String comments;
+    private String helpInfo;
+
     private Boolean notified;
     private String username;
     private Disaster disaster;
@@ -96,6 +99,14 @@ public class Alert {
         this.dangerLevel = dangerLevel;
     }
 
+    public String getHelpInfo() {
+        return helpInfo;
+    }
+
+    public void setHelpInfo(String helpInfo) {
+        this.helpInfo = helpInfo;
+    }
+
     public static Alert buildAlert(JsonObject jsonObject) {
         Alert alert = new Alert();
 
@@ -137,6 +148,9 @@ public class Alert {
 
         try {
             alert.setDangerLevel(DangerLevel.valueOf(jsonObject.get("dangerLevel").getAsString()));
+        }catch (Exception ignore){}
+        try {
+            alert.setHelpInfo(jsonObject.get("helpInfo").getAsString());
         }catch (Exception ignore){}
 
         return alert;

@@ -1,6 +1,5 @@
 package com.unipi.msc.smartalertandroid.Activities;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,37 +7,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.unipi.msc.smartalertandroid.Model.User;
 import com.unipi.msc.smartalertandroid.R;
 import com.unipi.msc.smartalertandroid.Retrofit.APIInterface;
 import com.unipi.msc.smartalertandroid.Retrofit.Request.LoginRequest;
 import com.unipi.msc.smartalertandroid.Retrofit.Request.RegisterRequest;
 import com.unipi.msc.smartalertandroid.Retrofit.RetrofitClient;
-import com.unipi.msc.smartalertandroid.Shared.ErrorResponse;
-import com.unipi.msc.smartalertandroid.Shared.Tags;
 import com.unipi.msc.smartalertandroid.Shared.Tools;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText editTextUsername,
-             editTextPassword,
-             editTextPasswordVerify,
-             editTextName;
-    Button buttonLogin, buttonRegister;
+    EditText editTextUsername, editTextPassword, editTextName;
+    TextView textViewName, textViewChangeMode;
+    Button buttonSubmit;
     APIInterface apiInterface;
     Callback<JsonObject> handleResponse;
     Toast t;
@@ -56,12 +44,12 @@ public class LoginActivity extends AppCompatActivity {
     private void initViews() {
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
-        editTextPasswordVerify = findViewById(R.id.editTextPasswordVerify);
         editTextName = findViewById(R.id.editTextName);
-        buttonLogin = findViewById(R.id.buttonLogin);
-        buttonRegister = findViewById(R.id.buttonRegister);
-        buttonRegister.setOnClickListener(this::register);
-        buttonLogin.setOnClickListener(this::login);
+        buttonSubmit = findViewById(R.id.buttonSubmit);
+        textViewChangeMode = findViewById(R.id.textViewChangeMode);
+        textViewName = findViewById(R.id.textViewName);
+        textViewChangeMode.setOnClickListener(this::changeMode);
+        buttonSubmit.setOnClickListener(this::submit);
         handleResponse = new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -86,7 +74,15 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
-    private void register(View view) {
+    private void submit(View view) {
+        if (buttonSubmit.getText().equals(getString(R.string.register))){
+            register();
+        }else{
+            login();
+        }
+    }
+
+    private void register() {
         RegisterRequest request = new RegisterRequest(editTextUsername.getText().toString(),
                                                       editTextPassword.getText().toString(),
                                                       editTextName.getText().toString());
@@ -94,12 +90,35 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(handleResponse);
     }
 
-    private void login(View view) {
+    private void login() {
         LoginRequest request = new LoginRequest(editTextUsername.getText().toString(),
                                                 editTextPassword.getText().toString());
         Call<JsonObject> call = apiInterface.login(request);
         call.enqueue(handleResponse);
     }
+
+    private void changeMode(View view) {
+        if (textViewChangeMode.getText().equals(getString(R.string.register))){
+            registerUI();
+        }else{
+            loginUI();
+        }
+    }
+
+    private void registerUI() {
+        textViewName.setVisibility(View.VISIBLE);
+        editTextName.setVisibility(View.VISIBLE);
+        textViewChangeMode.setText(getString(R.string.login));
+        buttonSubmit.setText(getString(R.string.register));
+    }
+
+    private void loginUI() {
+        textViewName.setVisibility(View.GONE);
+        editTextName.setVisibility(View.GONE);
+        textViewChangeMode.setText(getString(R.string.register));
+        buttonSubmit.setText(getString(R.string.login));
+    }
+
     private void openMainActivity(){
         startActivity(new Intent(LoginActivity.this,MainActivity.class));
     }

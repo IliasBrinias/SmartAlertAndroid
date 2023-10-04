@@ -37,6 +37,7 @@ import android.widget.Toast;
 import android.Manifest;
 import com.unipi.msc.smartalertandroid.R;
 import com.unipi.msc.smartalertandroid.Shared.Tags;
+import com.unipi.msc.smartalertandroid.Shared.Tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;

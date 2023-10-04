@@ -5,4 +5,5 @@
     <color name="gray">#808080</color>
     <color name="orange">#FFA500</color>
     <color name="red">#FF0000</color>
+    <color name="color_alerted">#65FF0000</color>
 </resources>

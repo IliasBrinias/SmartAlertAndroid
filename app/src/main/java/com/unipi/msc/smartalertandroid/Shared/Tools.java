@@ -6,9 +6,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.unipi.msc.smartalertandroid.Activities.LoginActivity;
@@ -19,7 +25,9 @@ import com.unipi.msc.smartalertandroid.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import retrofit2.Response;
 
@@ -119,11 +127,25 @@ public class Tools {
 
     public static String getHelpInfo(Context context, String help) {
         switch (help){
-            case "Flood": return context.getString(R.string.flood_help);
-            case "Rain": return context.getString(R.string.rain_help);
-            case "Τornado": return context.getString(R.string.tornado_help);
-            case "Εarthquake": return context.getString(R.string.earthquake_help);
+            case Tags.HIGHER_PLACE: return context.getString(R.string.flood_help);
+            case Tags.STAY_HOME: return context.getString(R.string.rain_help);
+            case Tags.SHELTER: return context.getString(R.string.tornado_help);
+            case Tags.UNDER_TABLE: return context.getString(R.string.earthquake_help);
             default: return "";
         }
+    }
+    public static BitmapDescriptor getBitmapDescriptor(Context context, int id) {
+        Drawable vectorDrawable = context.getDrawable(id);
+        int h = ((int) dpToPx(context,40));
+        int w = ((int) dpToPx(context, 40));
+        vectorDrawable.setBounds(0, 0, w, h);
+        Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bm);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bm);
+    }
+    public static int dpToPx(Context context, int dp) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }

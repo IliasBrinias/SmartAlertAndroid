@@ -12,4 +12,9 @@ public class Tags {
     public static final int ACCESS_DENIED = 403;
     public static final int CIRCLE_RADIUS = 10000;
     public static final int DISTANCE_LIMIT = 1000;
+    public static final String ALERT_INFO = "ALERT_INFO";
+    public static final String HIGHER_PLACE = "HIGHER_PLACE";
+    public static final String STAY_HOME = "STAY_HOME";
+    public static final String SHELTER = "SHELTER";
+    public static final String UNDER_TABLE = "UNDER_TABLE";
 }

@@ -94,6 +94,7 @@ public class GoogleCloudMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_app_icon)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(disaster)
+                .setContentInfo(Tools.getHelpInfo(this, help))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(Tools.getHelpInfo(this, help)))
                 .setAutoCancel(true)

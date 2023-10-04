@@ -1,9 +1,11 @@
 package com.unipi.msc.smartalertandroid.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,11 +21,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.gson.JsonObject;
 import com.unipi.msc.smartalertandroid.R;
 import com.unipi.msc.smartalertandroid.Retrofit.APIInterface;
 import com.unipi.msc.smartalertandroid.Retrofit.RetrofitClient;
 import com.unipi.msc.smartalertandroid.Shared.DangerLevel;
+import com.unipi.msc.smartalertandroid.Shared.Role;
 import com.unipi.msc.smartalertandroid.Shared.Tags;
 import com.unipi.msc.smartalertandroid.Shared.Tools;
 import com.unipi.msc.smartalertandroid.Model.Alert;
@@ -39,7 +43,8 @@ public class AlertActivity extends AppCompatActivity {
     private ImageButton imageButtonExit;
     private ImageView imageViewPhoto, imageViewDanger;
     private TextView textViewName, textViewLocation,
-                     textViewDisaster, textViewComments;
+                     textViewDisaster, textViewComments,
+                     textViewHelp, textViewHelpTitle;
     private Button buttonNotify;
     private APIInterface apiInterface;
     private Toast t;
@@ -81,6 +86,12 @@ public class AlertActivity extends AppCompatActivity {
         textViewName.setText(alert.getUsername());
         textViewDisaster.setText(String.valueOf(alert.getDisaster().getName()));
         textViewComments.setText(alert.getComments());
+        if (alert.getNotified()){
+            buttonNotify.setVisibility(View.GONE);
+            textViewHelp.setVisibility(View.VISIBLE);
+            textViewHelpTitle.setVisibility(View.VISIBLE);
+            textViewHelp.setText(Tools.getHelpInfo(this, alert.getHelpInfo()));
+        }
         if (alert.getDangerLevel() == DangerLevel.LOW){
             imageViewDanger.setImageResource(R.drawable.ic_alert_low);
         } else if (alert.getDangerLevel() == DangerLevel.MEDIUM) {
@@ -95,7 +106,7 @@ public class AlertActivity extends AppCompatActivity {
 
         Glide.with(this)
             .load(new GlideUrl(Tags.API_URL + "/" + alert.getImage(),lazyHeaders))
-                .centerCrop()
+            .centerCrop()
             .into(imageViewPhoto);
     }
     private String getFormattedAddress(double latitude, double longitude){
@@ -116,6 +127,11 @@ public class AlertActivity extends AppCompatActivity {
         textViewDisaster = findViewById(R.id.textViewDisaster);
         textViewComments = findViewById(R.id.textViewComments);
         buttonNotify = findViewById(R.id.buttonNotify);
+        textViewHelp = findViewById(R.id.textViewHelp);
+        textViewHelpTitle = findViewById(R.id.textViewHelpTitle);
+        if (Tools.getUserFromMemory(this).getRole() == Role.OFFICER){
+            buttonNotify.setVisibility(View.VISIBLE);
+        }
         imageButtonExit.setOnClickListener(v->finish());
         buttonNotify.setOnClickListener(this::notifyAlert);
     }
@@ -138,4 +154,5 @@ public class AlertActivity extends AppCompatActivity {
             }
         });
     }
+
 }
