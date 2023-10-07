@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int REQ_LOCATION_CODE = 123;
     private TextView textViewTitle;
     private User user;
-    private ImageButton imageButtonLogout, imageButtonRefresh;
+    private ImageButton imageButtonLogout, imageButtonRefresh, imageButtonStatistics;
     private Button buttonCreateAlert;
     private MapView mapView;
     private GoogleMap googleMap;
@@ -105,10 +105,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         buttonCreateAlert = findViewById(R.id.buttonCreateAlert);
         imageButtonLogout = findViewById(R.id.imageButtonLogout);
         imageButtonRefresh = findViewById(R.id.imageButtonRefresh);
+        imageButtonStatistics = findViewById(R.id.imageButtonStatistics);
         imageButtonLogout.setOnClickListener(this::logout);
         buttonCreateAlert.setOnClickListener(this::showAlertActivity);
+        imageButtonStatistics.setOnClickListener(this::showStatisticsActivity);
         imageButtonRefresh.setOnClickListener(v->refreshData());
         textViewTitle.setText(getString(R.string.hello) + " " + user.getName());
+    }
+
+    private void showStatisticsActivity(View view) {
+        startActivity(new Intent(this, StatisticsActivity.class));
     }
 
     private void refreshData() {

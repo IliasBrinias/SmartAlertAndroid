@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/view_margin"
+    android:paddingRight="@dimen/view_margin"
+    android:paddingBottom="@dimen/view_margin"
+    >
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchCompatDisaster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disaster"
+        android:thumb="@null"
+        android:textColor="@drawable/disaster_text_color_selector"
+        android:padding="@dimen/view_margin"
+        android:background="@drawable/disaster_back_selector"/>
+
+
+</LinearLayout>

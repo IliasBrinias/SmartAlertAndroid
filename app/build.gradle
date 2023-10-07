@@ -5,13 +5,13 @@ plugins {
 
 android {
     namespace 'com.unipi.msc.smartalertandroid'
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.unipi.msc.smartalertandroid"
-        minSdkVersion 29
-        targetSdkVersion 33
-        compileSdkVersion 33
+        minSdk 29
+        targetSdk 33
+        compileSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -32,8 +32,9 @@ android {
         viewBinding true
     }
 }
-
 dependencies {
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     implementation 'com.github.bumptech.glide:glide:4.16.0'
 
     implementation 'androidx.preference:preference:1.2.1'

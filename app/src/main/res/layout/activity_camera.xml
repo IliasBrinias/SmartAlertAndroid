@@ -51,6 +51,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/view_margin"
-            app:srcCompat="@drawable/ic_back" /> <!-- Set the onClick attribute to trigger the capture -->
+            app:srcCompat="@drawable/ic_back" />
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/view_margin"
+            android:text="@string/take_a_picture"
+            android:textColor="?colorPrimaryVariant"
+            android:textSize="@dimen/label_size" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

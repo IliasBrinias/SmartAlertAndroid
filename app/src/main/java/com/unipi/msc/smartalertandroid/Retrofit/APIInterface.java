@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import com.unipi.msc.smartalertandroid.Retrofit.Request.LoginRequest;
 import com.unipi.msc.smartalertandroid.Retrofit.Request.RegisterRequest;
 
+import java.util.List;
+
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -11,6 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface APIInterface {
     @POST("/auth/login")
@@ -33,6 +36,11 @@ public interface APIInterface {
     Call<JsonObject> getNotifiedAlerts(@Header("Authorization") String auth);
     @POST("/alert/{id}/notify")
     Call<JsonObject> notifyAlert(@Path("id") Long id, @Header("Authorization") String auth);
+    @GET("/statistics/disaster")
+    Call<JsonObject> disasterStatistics(@Query("disasterIds") List<Long> disasterIds,
+                                        @Query("dateFrom") Long dateFrom,
+                                        @Query("dateTo") Long dateTo,
+                                        @Header("Authorization") String auth);
 
 //    @POST("/api/users")
 //    Call<User> createUser(@Body User user);

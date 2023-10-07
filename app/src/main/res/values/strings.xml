@@ -41,6 +41,10 @@
     <string name="earthquake_help" />
     <string name="danger">DANGER</string>
     <string name="help">Help</string>
+    <string name="select_your_desired_dates">Select your desired Dates</string>
+    <string name="no_date_range_selected">No Date Range Selected</string>
+    <string name="statistics">Statistics</string>
+    <string name="take_a_picture">Take a Picture</string>
     <string-array name="risk_array">
         <item name='flood'>Flood</item>
         <item name='fire'>Fire</item>
