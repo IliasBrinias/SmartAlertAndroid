@@ -17,4 +17,5 @@ public class Tags {
     public static final String STAY_HOME = "STAY_HOME";
     public static final String SHELTER = "SHELTER";
     public static final String UNDER_TABLE = "UNDER_TABLE";
+    public static final String CHANNEL_ID = "123";
 }

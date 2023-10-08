@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -43,13 +44,15 @@ public class GoogleCloudMessagingService extends FirebaseMessagingService {
         super.onCreate();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mainHandler = new Handler(Looper.getMainLooper());
-        locationListener = location -> {
-            double distance = Tools.distance(latitude, location.getLatitude(), longitude, location.getLongitude());
-            if (distance <= Tags.DISTANCE_LIMIT) {
-                showNotification(alertId, disaster, help);
-            }
-            locationManager.removeUpdates(locationListener);
-        };
+        locationListener = this::handleLocation;
+    }
+
+    private void handleLocation(Location location) {
+        double distance = Tools.distance(latitude, location.getLatitude(), longitude, location.getLongitude());
+        if (distance <= Tags.DISTANCE_LIMIT) {
+            showNotification(alertId, disaster, help);
+        }
+        locationManager.removeUpdates(locationListener);
     }
 
     @Override
@@ -77,20 +80,28 @@ public class GoogleCloudMessagingService extends FirebaseMessagingService {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mainHandler.post(() -> locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener));
+            mainHandler.post(() -> {
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location != null){
+                    handleLocation(location);
+                }else {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                }
+            });
         }
     }
 
     @SuppressLint("MissingPermission")
     private void showNotification(Long alertId, String disaster, String help) {
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
 
-        String channelId = "123";
+        notificationManager.createNotificationChannel(new NotificationChannel(Tags.CHANNEL_ID, "Smart Alert", NotificationManager.IMPORTANCE_DEFAULT));
 
         Intent intent = new Intent(this, AlertActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(Tags.ALERT_ID, alertId);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Tags.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_app_icon)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(disaster)
@@ -99,8 +110,7 @@ public class GoogleCloudMessagingService extends FirebaseMessagingService {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(Tools.getHelpInfo(this, help)))
                 .setAutoCancel(true)
                 .setContentIntent(PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE))
-                .setChannelId(channelId);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                .setChannelId(Tags.CHANNEL_ID);
         if (notificationManager.areNotificationsEnabled()) {
             notificationManager.notify(123, builder.build());
         }

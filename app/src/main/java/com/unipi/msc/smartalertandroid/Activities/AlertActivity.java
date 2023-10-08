@@ -87,7 +87,7 @@ public class AlertActivity extends AppCompatActivity {
         textViewDisaster.setText(String.valueOf(alert.getDisaster().getName()));
         textViewComments.setText(alert.getComments());
         if (alert.getNotified()){
-            buttonNotify.setVisibility(View.GONE);
+//            buttonNotify.setVisibility(View.GONE);
             textViewHelp.setVisibility(View.VISIBLE);
             textViewHelpTitle.setVisibility(View.VISIBLE);
             textViewHelp.setText(Tools.getHelpInfo(this, alert.getHelpInfo()));

@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private List<Circle> circles = new ArrayList<>();
     private List<Marker> markers = new ArrayList<>();
     Toast t;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         imageButtonLogout.setOnClickListener(this::logout);
         buttonCreateAlert.setOnClickListener(this::showAlertActivity);
         imageButtonStatistics.setOnClickListener(this::showStatisticsActivity);
-        imageButtonRefresh.setOnClickListener(v->refreshData());
+        imageButtonRefresh.setOnClickListener(v -> refreshData());
         textViewTitle.setText(getString(R.string.hello) + " " + user.getName());
     }
 
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         apiInterface.getNotifiedAlerts(Tools.getTokenFromMemory(this)).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     try {
                         List<Alert> alerts = new ArrayList<>();
                         if (response.body().size() == 0) return;
@@ -131,12 +132,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             alerts.add(Alert.buildAlert(element.getAsJsonObject()));
                         }
                         showAlertedAreas(alerts);
-                    }catch (Exception ignore){}
-                }else {
-                    String msg = Tools.handleErrorResponse(MainActivity.this,response);
+                    } catch (Exception ignore) {
+                    }
+                } else {
+                    String msg = Tools.handleErrorResponse(MainActivity.this, response);
                     Tools.showToast(t, MainActivity.this, msg);
                 }
             }
+
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 t.printStackTrace();
@@ -170,22 +173,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void clearMapElements() {
-        for (Circle c:circles) c.remove();
-        for (Marker m:markers) m.remove();
+        for (Circle c : circles) c.remove();
+        for (Marker m : markers) m.remove();
     }
 
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            googleMap.setMyLocationEnabled(true);
-            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        }
+        enableGPS();
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setPadding(0,0,0,Tools.dpToPx(MainActivity.this, 55));
+        googleMap.setPadding(0, 0, 0, Tools.dpToPx(MainActivity.this, 55));
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.9838, 23.7275), 6));
         googleMap.setOnCircleClickListener(circle -> openAlertActivity((Long) circle.getTag()));
@@ -197,14 +195,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void showPendingAlerts(List<Alert> alerts) {
-        for (Alert alert:alerts) {
+        for (Alert alert : alerts) {
             BitmapDescriptor iconBitmap;
-            if (alert.getDangerLevel() == DangerLevel.LOW){
-                iconBitmap = Tools.getBitmapDescriptor(this,R.drawable.ic_alert_low);
+            if (alert.getDangerLevel() == DangerLevel.LOW) {
+                iconBitmap = Tools.getBitmapDescriptor(this, R.drawable.ic_alert_low);
             } else if (alert.getDangerLevel() == DangerLevel.MEDIUM) {
-                iconBitmap = Tools.getBitmapDescriptor(this,R.drawable.ic_alert_medium);
-            }else{
-                iconBitmap = Tools.getBitmapDescriptor(this,R.drawable.ic_alert_high);
+                iconBitmap = Tools.getBitmapDescriptor(this, R.drawable.ic_alert_medium);
+            } else {
+                iconBitmap = Tools.getBitmapDescriptor(this, R.drawable.ic_alert_high);
             }
             Marker marker = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(alert.getLatitude(), alert.getLongitude()))
@@ -217,12 +215,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void showAlertedAreas(List<Alert> alerts) {
-        for (Alert alert:alerts) {
+        for (Alert alert : alerts) {
             Circle circle = googleMap.addCircle(new CircleOptions()
-                .center(new LatLng(alert.getLatitude(), alert.getLongitude()))
-                .radius(Tags.CIRCLE_RADIUS)
-                .clickable(true)
-                .fillColor(getColor(R.color.color_alerted)));
+                    .center(new LatLng(alert.getLatitude(), alert.getLongitude()))
+                    .radius(Tags.CIRCLE_RADIUS)
+                    .clickable(true)
+                    .fillColor(getColor(R.color.color_alerted)));
             circle.setTag(alert.getId());
             circles.add(circle);
         }
@@ -233,12 +231,47 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         mapView.onResume();
         refreshData();
+        enableGPS();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause();
+        disableGPS();
+    }
+
+    private void disableGPS() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        if (googleMap!=null){
+            googleMap.setMyLocationEnabled(false);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        }
+    }
+    private void enableGPS() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        if (googleMap!=null){
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        }
     }
 
     @Override
