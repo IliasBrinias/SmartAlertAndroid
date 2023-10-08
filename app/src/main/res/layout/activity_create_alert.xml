@@ -102,7 +102,6 @@
             android:drawableBottom="@drawable/ic_alert_low"
             android:button="@null"
             android:gravity="center"
-            android:text="Search"
             android:textColor="@color/white" />
 
         <RadioButton
@@ -117,7 +116,6 @@
             android:drawableBottom="@drawable/ic_alert_medium"
             android:button="@null"
             android:gravity="center"
-            android:text="Offers"
             android:textColor="@color/white" />
         <RadioButton
             android:id="@+id/radioButtonHigh"
@@ -131,7 +129,6 @@
             android:drawableBottom="@drawable/ic_alert_high"
             android:button="@null"
             android:gravity="center"
-            android:text="Offers"
             android:textColor="@color/white" />
     </RadioGroup>
 
@@ -146,7 +143,6 @@
         android:background="@drawable/ic_field_back"
         android:gravity="start"
         android:padding="@dimen/view_margin"
-        android:text="asdasdasdasdasdasd"
         app:layout_constraintBottom_toTopOf="@+id/buttonSubmit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

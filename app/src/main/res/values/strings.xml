@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Smart Alert</string>
+    <string name="app_name" translatable="false">Smart Alert</string>
     <string name="password">Password</string>
     <string name="name">Name</string>
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="invalid_credentials">Invalid Credentials</string>
-    <string name="something_happened">Something Happened...</string>
+    <string name="something_happened">Something Happened…</string>
     <string name="password_verify">Password Verify</string>
     <string name="register">Register</string>
     <string name="title_activity_main">MainActivity</string>
@@ -19,7 +19,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="submit">Submit</string>
     <string name="create_an_alert">Create an Alert</string>
-    <string name="alert_submited">Alert submited sucessfully</string>
+    <string name="alert_submited">Alert submitted successfully</string>
     <string name="access_denied">Access Denied</string>
     <string name="username_exists">Username Exists</string>
     <string name="fill_obligatory_fields">Fill Obligatory Fields</string>
@@ -35,10 +35,10 @@
     <string name="location">Location</string>
     <string name="comments">Comments</string>
     <string name="users_notified">Users Notified</string>
-    <string name="flood_help" />
-    <string name="rain_help" />
-    <string name="tornado_help" />
-    <string name="earthquake_help" />
+    <string name="flood_help">Your safety is paramount during a flood. Follow local authorities advice, evacuate if necessary, and stay tuned to emergency updates. Please prioritize your well-being above all else</string>
+    <string name="rain_help">During heavy rainfall, remember to stay safe and avoid flooded areas. Keep informed about weather alerts and take necessary precautions to protect yourself and your loved ones. Your safety is our top priority</string>
+    <string name="tornado_help">In the face of a tornado, prioritize your safety above all else. Seek shelter in a sturdy building, preferably a basement or interior room, and stay informed through weather alerts. Your well-being is our utmost concern during this dangerous event</string>
+    <string name="earthquake_help">During an earthquake, your safety is paramount. Drop, cover, and hold on. Stay away from windows and heavy objects. After the shaking stops, check for injuries, and be prepared for aftershocks. Your well-being is our top priority during this seismic event</string>
     <string name="danger">DANGER</string>
     <string name="help">Help</string>
     <string name="select_your_desired_dates">Select your desired Dates</string>

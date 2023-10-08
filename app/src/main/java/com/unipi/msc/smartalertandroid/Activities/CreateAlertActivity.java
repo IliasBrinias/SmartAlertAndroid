@@ -192,19 +192,13 @@ public class CreateAlertActivity extends AppCompatActivity implements LocationLi
 
     private DangerLevel getDangerLevel() {
         DangerLevel dangerLevel = DangerLevel.MEDIUM;
-        switch (radioGroupDanger.getCheckedRadioButtonId()){
-            case 0: {
-                dangerLevel = DangerLevel.LOW;
-                break;
-            }
-            case 1: {
-                dangerLevel = DangerLevel.MEDIUM;
-                break;
-            }
-            case 2: {
-                dangerLevel = DangerLevel.HIGH;
-                break;
-            }
+        int checkedRadioButtonId = radioGroupDanger.getCheckedRadioButtonId();
+        if (checkedRadioButtonId == R.id.radioButtonLow) {
+            dangerLevel = DangerLevel.LOW;
+        } else if (checkedRadioButtonId == R.id.radioButtonMedium) {
+            dangerLevel = DangerLevel.MEDIUM;
+        } else if (checkedRadioButtonId == R.id.radioButtonHigh) {
+            dangerLevel = DangerLevel.HIGH;
         }
         return dangerLevel;
     }

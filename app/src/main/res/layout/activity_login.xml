@@ -28,10 +28,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_field_back"
             android:ems="10"
-            android:hint="@string/username"
             android:inputType="text"
             android:padding="10dp"
-            android:text="officer" />
+            android:text="" />
 
         <View
             android:layout_width="wrap_content"
@@ -50,10 +49,9 @@
             android:layout_weight="1"
             android:background="@drawable/ic_field_back"
             android:ems="10"
-            android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="10dp"
-            android:text="officer" />
+            android:text="" />
 
         <View
             android:layout_width="wrap_content"
@@ -63,6 +61,7 @@
             android:id="@+id/textViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="@string/name"
             android:textSize="@dimen/label_size" />
 
@@ -73,7 +72,7 @@
             android:layout_weight="1"
             android:background="@drawable/ic_field_back"
             android:ems="10"
-            android:hint="@string/name"
+            android:visibility="gone"
             android:padding="10dp" />
     </LinearLayout>
 
@@ -83,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/view_margin"
         android:layout_marginRight="@dimen/view_margin"
-        android:text="@string/register"
+        android:text="@string/login"
         app:layout_constraintBottom_toTopOf="@+id/textViewChangeMode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -92,7 +91,7 @@
         android:id="@+id/textViewChangeMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login"
+        android:text="@string/register"
         android:gravity="center"
         android:padding="@dimen/view_margin"
         android:layout_marginLeft="@dimen/view_margin"
